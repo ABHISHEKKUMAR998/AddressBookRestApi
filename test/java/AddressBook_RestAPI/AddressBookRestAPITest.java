@@ -96,5 +96,20 @@ public class AddressBookRestAPITest {
 		int statusCode = response.getStatusCode();
 		assertEquals(200, statusCode);
 	}
+	@Test
+	public void givenContactDetails_WhenDeleted_ShouldMatch200ResponseAndCount() {
+		AddressBookData[] arrayOfPerson = getAddressbookList();
+		addressbookPayrollService = new AddressBookPayrollService(Arrays.asList(arrayOfPerson));
+		AddressBookData addressBookData = addressbookPayrollService.getAddressBookData("Raman");
+		RequestSpecification request = RestAssured.given();
+		request.header("Content-Type", "application/json");
+		Response response = request.delete("/addressbook/" + addressBookData.id);
+		int statusCode = response.getStatusCode();
+		assertEquals(200, statusCode);
+
+		addressbookPayrollService.deleteContactPayroll(addressBookData.firstName, REST_IO);
+		long entries = addressbookPayrollService.countEntries(REST_IO);
+		assertEquals(3, entries);
+	}
 
 }
