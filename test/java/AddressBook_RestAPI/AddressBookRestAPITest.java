@@ -80,5 +80,21 @@ public class AddressBookRestAPITest {
 		long entries = addressbookPayrollService.countEntries(REST_IO);
 		assertEquals(4, entries);
 	}
+	
+	@Test
+	public void givenCity_WhenUpdated_ShouldMatch200response() {
+		AddressBookData[] arrayOfPerson = getAddressbookList();
+		addressbookPayrollService = new AddressBookPayrollService(Arrays.asList(arrayOfPerson));
+		addressbookPayrollService.updateContactCity("Akash", "Munger", REST_IO);
+		AddressBookData addressBookData = addressbookPayrollService.getAddressBookData("Akash");
+
+		String addJson = new Gson().toJson(addressBookData);
+		RequestSpecification request = RestAssured.given();
+		request.header("Content-Type", "application/json");
+		request.body(addJson);
+		Response response = request.put("/addressbook/" + addressBookData.id);
+		int statusCode = response.getStatusCode();
+		assertEquals(200, statusCode);
+	}
 
 }

@@ -25,4 +25,17 @@ public class AddressBookPayrollService {
 		addressbookList.add(addressBookData);
 	}
 
+	
+	public void updateContactCity(String firstName, String city, IOService ioService) {
+		AddressBookData addressBookData = this.getAddressBookData(firstName);
+		if (addressBookData != null)
+			addressBookData.city = city;
+	}
+
+	public AddressBookData getAddressBookData(String firstName) {
+		AddressBookData addressBookData;
+		addressBookData = this.addressbookList.stream().filter(dataItem -> dataItem.firstName.equals(firstName))
+				.findFirst().orElse(null);
+		return addressBookData;
+	}
 } 
